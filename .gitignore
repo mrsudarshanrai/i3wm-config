@@ -1,0 +1,23 @@
+*
+!.gitignore
+!.zshrc
+!.zprofile
+!.zshenv
+!.xinitrc
+!.config
+
+# i3-status-rust
+!.config/i3status-rust
+!.config/i3status-rust/config.toml
+
+# gtk
+!.config/gtk-3.0/
+!.config/gtk-3.0/settings.ini
+
+# picom
+!.config/picom/
+!.config/picom/picom.conf
+
+# i3
+!.config/i3/
+!.config/i3/config
