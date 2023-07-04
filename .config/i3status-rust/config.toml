@@ -1,18 +1,27 @@
 icons_format = "{icon}"
 
 [theme]
-theme = "nord-dark"
+theme = "srcery"
 [theme.overrides]
 idle_bg = "#123456"
 idle_fg = "#abcdef"
 
-[icons]
-icons = "awesome4"
-[icons.overrides]
-bat = ["|E|", "|_|", "|=|", "|F|"]
-bat_charging = "|^| "
+[[block]]
+block = "custom"
+command = "echo \uf011" # assumes fontawesome icons
+interval = "once"
+[[block.click]]
+button = "left"
+cmd = "nemo"
 
-#[[block]]
+[icons]
+icons = "awesome6"
+[icons.overrides]
+
+[[block]]
+block = "battery"
+format = " $icon $percentage "
+[[block]]
 block = "cpu"
 
 [[block]]
