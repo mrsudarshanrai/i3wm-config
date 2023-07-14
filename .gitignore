@@ -25,3 +25,7 @@
 # i3
 !.config/rofi/
 !.config/rofi/config.rasi
+
+# i3lock
+!.config/i3lock/
+!.config/i3lock/lock.sh
