@@ -212,3 +212,7 @@ bar {
         urgent_workspace #2f343a #900000 #ffffff
     }
 }
+
+# i3 gaps
+gaps inner 5
+gaps outer 5
