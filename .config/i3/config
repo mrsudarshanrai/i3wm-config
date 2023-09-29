@@ -214,5 +214,8 @@ bar {
 }
 
 # i3 gaps
-gaps inner 5
-gaps outer 5
+# gaps inner 5
+# gaps outer 5
+
+default_border none
+

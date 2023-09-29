@@ -105,11 +105,17 @@ source $ZSH/oh-my-zsh.sh
 
 # xrandr
 alias xrauto="xrandr --auto"
+
+# nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# java/android
 export ANDROID_HOME=$HOME/Android/Sdk
 export JAVA_HOME=/usr/bin/java
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# rust
+source "$HOME/.cargo/env"

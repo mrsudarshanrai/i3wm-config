@@ -30,7 +30,7 @@ command = "echo \uf26c"
 interval = "once"
 [[block.click]]
 button = "left"
-cmd = "xrandr --output eDP --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output HDMI-A-0 --mode 1920x1080 --pos 0x0 --rotate normal"
+cmd = "xrandr --output eDP-1 --mode 1920x1080 --pos 0x1080 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal"
 
 [[block]]
 block = "focused_window"
