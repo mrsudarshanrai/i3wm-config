@@ -5,6 +5,7 @@
 !.zshenv
 !.xinitrc
 !.config
+!.images
 
 # i3-status-rust
 !.config/i3status-rust
@@ -29,3 +30,8 @@
 # i3lock
 !.config/i3lock/
 !.config/i3lock/lock.sh
+
+
+# wallpaper
+!.images/wallpapers
+!.images/wallpapers/*

@@ -30,7 +30,7 @@ exec guake
 
 # exec_always --not-startup-id $HOME/.config/polybar/launch.sh
 # set wallpaper
-exec feh --bg-fill $HOME/.images/wallpaper.jpg
+exec feh --bg-fill $HOME/.images/wallpapers/wallpaper.jpg
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
