@@ -32,6 +32,10 @@ exec guake
 # set wallpaper
 exec feh --bg-fill $HOME/.images/wallpapers/wallpaper.jpg
 
+# start dunst (notification-daemon)
+exec --no-startup-id dunst
+
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 

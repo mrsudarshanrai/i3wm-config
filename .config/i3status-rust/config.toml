@@ -37,7 +37,17 @@ block = "focused_window"
 [block.format]
 full = " $title.str(max_w:15) |"
 short = " $title.str(max_w:10) |"
-[b1lock.theme_overrides]
+
+[block.theme_overrides]
+idle_bg = "#000000"
+idle_fg = "#f7accf"
+[block.icons_overrides]
+
+[[block]]
+block = "net"
+format = " $icon {$signal_strength $ssid $frequency|Wired connection} via $device "
+[block.theme_overrides]
+
 idle_bg = "#000000"
 idle_fg = "#f7accf"
 [block.icons_overrides]

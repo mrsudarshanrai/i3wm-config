@@ -119,3 +119,5 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # rust
 source "$HOME/.cargo/env"
+
+export NODE_OPTIONS=--max_old_space_size=6144
