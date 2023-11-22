@@ -49,7 +49,7 @@ format = " $icon {$signal_strength $ssid $frequency|Wired connection} via $devic
 [block.theme_overrides]
 
 idle_bg = "#000000"
-idle_fg = "#f7accf"
+idle_fg = "#04e824"
 [block.icons_overrides]
 
 [[block]]
