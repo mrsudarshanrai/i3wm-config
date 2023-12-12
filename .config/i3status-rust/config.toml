@@ -71,34 +71,34 @@ idle_fg = "#8651c9"
 [block.icons_overrides]
 format = " $icon BATTERY $percentage " 
 
-[[block]]
-block = "cpu"
-icons_format = "{icon} CPU"
-[block.theme_overrides]
-idle_bg = "#000000"
-idle_fg = "#8651c9"
-[block.icons_overrides]
-cpu_boost_on = "ON"
-cpu_boost_off = "OFF"
+# [[block]]
+# block = "cpu"
+# icons_format = "{icon} CPU"
+# [block.theme_overrides]
+# idle_bg = "#000000"
+# idle_fg = "#8651c9"
+# [block.icons_overrides]
+# cpu_boost_on = "ON"
+# cpu_boost_off = "OFF"
 
-[[block]]
-block = "disk_space"
-path = "/"
-info_type = "available"
-alert_unit = "GB"
-interval = 10
-warning = 20.0
-alert = 10.0
-format = " $icon SPACE $available.eng(w:2) "
+# [[block]]
+# block = "disk_space"
+# path = "/"
+# info_type = "available"
+# alert_unit = "GB"
+# interval = 10
+# warning = 20.0
+# alert = 10.0
+# format = " $icon SPACE $available.eng(w:2) "
 
-[[block]]
-block = "memory"
-format = " $icon MEMORY $mem_total_used_percents.eng(w:2) "
-format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
-[block.theme_overrides]
-idle_bg = "#000000"
-idle_fg = "#04E824"
-[block.icons_overrides]
+# [[block]]
+# block = "memory"
+# format = " $icon MEMORY $mem_total_used_percents.eng(w:2) "
+# format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
+# [block.theme_overrides]
+# idle_bg = "#000000"
+# idle_fg = "#04E824"
+# [block.icons_overrides]
 
 [[block]]
 block = "uptime"
