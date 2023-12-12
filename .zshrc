@@ -121,3 +121,10 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 source "$HOME/.cargo/env"
 
 export NODE_OPTIONS=--max_old_space_size=6144
+
+# bun completions
+[ -s "/home/fox/.bun/_bun" ] && source "/home/fox/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
