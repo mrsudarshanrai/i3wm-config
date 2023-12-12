@@ -35,6 +35,8 @@ exec feh --bg-fill $HOME/.images/wallpapers/wallpaper.jpg
 # start dunst (notification-daemon)
 exec --no-startup-id dunst
 
+# start greenclip daemon (clipboard helper)
+exec --no-startup-id greenclip daemon
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -221,8 +223,8 @@ bar {
 }
 
 # i3 gaps
-gaps inner 8
-gaps outer 2
+# gaps inner 8
+# gaps outer 2
 
 default_border none
 
