@@ -106,6 +106,15 @@ source $ZSH/oh-my-zsh.sh
 # xrandr
 alias xrauto="xrandr --auto"
 
+# nemovim alias
+alias nv="nvim"
+
+# codes directory
+alias codes="cd $HOME/codes"
+
+# apps directory
+alias apps="cd $HOME/apps"
+
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -127,4 +136,4 @@ export NODE_OPTIONS=--max_old_space_size=6144
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$BUN_INSTALL/bin:$PATH" 

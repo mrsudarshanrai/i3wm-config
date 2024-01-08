@@ -228,3 +228,6 @@ bar {
 
 default_border none
 
+# scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show

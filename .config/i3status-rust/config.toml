@@ -24,6 +24,7 @@ idle_bg = "#000000"
 idle_fg = "#53a548"
 [block.icons_overrides]
 
+
 [[block]]
 block = "custom"
 command = "echo \uf26c"
@@ -42,6 +43,11 @@ short = " $title.str(max_w:10) |"
 idle_bg = "#000000"
 idle_fg = "#f7accf"
 [block.icons_overrides]
+
+[[block]]
+block = "music"
+format = " $icon {$combo.str(max_w:20,rot_interval:0.5) $prev $play $next |}"
+player = "spotify"
 
 [[block]]
 block = "net"
@@ -64,13 +70,12 @@ cmd = "pavucontrol"
 
 
 [[block]]
+# [block.theme_overrides]
+# idle_bg = "#000000"
+# idle_fg = "#8651c9"
+# [block.icons_overrides]
 block = "battery"
-[block.theme_overrides]
-idle_bg = "#000000"
-idle_fg = "#8651c9"
-[block.icons_overrides]
-format = " $icon BATTERY $percentage " 
-
+format = " $icon $percentage "
 # [[block]]
 # block = "cpu"
 # icons_format = "{icon} CPU"
