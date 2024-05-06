@@ -7,9 +7,9 @@ icons = "awesome6"
 
 
 [theme]
-theme = "plain"
+theme = "ctp-macchiato"
 [theme.overrides]
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#abcdef"
 
 [[block]]
@@ -20,14 +20,14 @@ interval = "once"
 button = "left"
 cmd = "~/timedoctor2/timedoctor2"
 [block.theme_overrides]
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#53a548"
 [block.icons_overrides]
 
 
 [[block]]
 block = "custom"
-command = "echo \uf26c"
+command = "echo \uf26c" 
 interval = "once"
 [[block.click]]
 button = "left"
@@ -40,7 +40,7 @@ full = " $title.str(max_w:15) |"
 short = " $title.str(max_w:10) |"
 
 [block.theme_overrides]
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#f7accf"
 [block.icons_overrides]
 
@@ -54,7 +54,7 @@ block = "net"
 format = " $icon {$signal_strength $ssid $frequency|Wired connection} via $device "
 [block.theme_overrides]
 
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#04e824"
 [block.icons_overrides]
 
@@ -63,7 +63,7 @@ block = "sound"
 [[block.click]]
 button = "left"
 [block.theme_overrides]
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#8651c9"
 [block.icons_overrides]
 cmd = "pavucontrol"
@@ -71,20 +71,21 @@ cmd = "pavucontrol"
 
 [[block]]
 # [block.theme_overrides]
-# idle_bg = "#000000"
+# idle_bg = "#2B4162"
 # idle_fg = "#8651c9"
 # [block.icons_overrides]
 block = "battery"
 format = " $icon $percentage "
-# [[block]]
-# block = "cpu"
-# icons_format = "{icon} CPU"
-# [block.theme_overrides]
-# idle_bg = "#000000"
-# idle_fg = "#8651c9"
-# [block.icons_overrides]
-# cpu_boost_on = "ON"
-# cpu_boost_off = "OFF"
+
+#[[block]]
+#block = "cpu"
+#icons_format = "{icon} CPU"
+#[block.theme_overrides]
+# idle_bg = "#2B4162"
+#idle_fg = "#8651c9"
+#[block.icons_overrides]
+#cpu_boost_on = "ON"
+#cpu_boost_off = "OFF"
 
 # [[block]]
 # block = "disk_space"
@@ -96,30 +97,30 @@ format = " $icon $percentage "
 # alert = 10.0
 # format = " $icon SPACE $available.eng(w:2) "
 
-# [[block]]
-# block = "memory"
-# format = " $icon MEMORY $mem_total_used_percents.eng(w:2) "
-# format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
-# [block.theme_overrides]
-# idle_bg = "#000000"
-# idle_fg = "#04E824"
-# [block.icons_overrides]
+#[[block]]
+#block = "memory"
+#format = " $icon MEMORY $mem_total_used_percents.eng(w:2) "
+#format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
+#[block.theme_overrides]
+# idle_bg = "#2B4162"
+#idle_fg = "#04E824"
+#[block.icons_overrides]
 
 [[block]]
 block = "uptime"
 interval = 3600
 format = " $icon UPTIME $text "
 [block.theme_overrides]
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#f4d35e"
 [block.icons_overrides]
 
 [[block]]
 block = "time"
 interval = 5
-format = " $timestamp.datetime(f:'%a %d/%m %r') "
+format = "$icon $timestamp.datetime(f:'%a %d/%m %r') "
 [block.theme_overrides]
-idle_bg = "#000000"
+# idle_bg = "#2B4162"
 idle_fg = "#e3d985"
 [block.icons_overrides]
 

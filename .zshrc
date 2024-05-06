@@ -137,3 +137,5 @@ export NODE_OPTIONS=--max_old_space_size=6144
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH" 
+
+PATH=~/.console-ninja/.bin:$PATH

@@ -209,12 +209,12 @@ exec --no-startup-id picom -b
 # finds out, if available)
 
 bar {
-    font pango:Fira Code Retina 10
+    font pango:Fira Code Retina 9
     position top
     status_command /usr/bin/i3status-rs $HOME/.config/i3status-rust/config.toml
     colors {
-        separator #5c6370
-        background #000000
+        separator #2B4162
+        background #2B4162
         statusline #ff0000
         focused_workspace #8651c9 #8651c9 #ffffff
         inactive_workspace #2c323b #2c323b #FFFFFF
@@ -226,8 +226,11 @@ bar {
 # gaps inner 8
 # gaps outer 2
 
+# borders
 default_border none
 
 # scratchpad
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
+
+popup_during_fullscreen leave_fullscreen
