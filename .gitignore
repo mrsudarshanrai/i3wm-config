@@ -35,3 +35,4 @@
 # wallpaper
 !.images/wallpapers
 !.images/wallpapers/*
+*storybook.log

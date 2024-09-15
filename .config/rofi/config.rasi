@@ -180,14 +180,19 @@ element-text.selected{
 }
 
 element {
-  children: [element-text ];
+  children: [element-text];
   background-color: #282D3F;
   padding:0px;
+  spacing: 4px;
 }
+
+element-icon {
+    background-color:#282D3F;
+  }
 
 element.selected {
   background-color: #282D3F;
-  pborder:3px;
+  border:0px;
 }
 
 window, overlay {
