@@ -144,4 +144,8 @@ export NODE_OPTIONS=--max_old_space_size=6144
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH" 
 
-PATH=~/.console-ninja/.bin:$PATH
+
+# python path 
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - bash)"
