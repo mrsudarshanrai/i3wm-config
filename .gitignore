@@ -45,3 +45,13 @@
 !.config/dunst/
 !.config/dunst/dunstrc
 
+# nvim/lazyVim
+!.config/nvim/
+!.config/nvim/lua/
+!.config/nvim/lua/config/
+!.config/nvim/lua/plugins/
+!.config/nvim/init.lua
+!.config/nvim/lua/config/lazy.lua
+!.config/nvim/lua/plugins/lsp.lua
+!.config/nvim/lua/plugins/tokyoNight.lua
+!.config/nvim/lua/plugins/fzf.lua
