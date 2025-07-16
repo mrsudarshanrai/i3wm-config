@@ -55,3 +55,12 @@
 !.config/nvim/lua/plugins/lsp.lua
 !.config/nvim/lua/plugins/tokyoNight.lua
 !.config/nvim/lua/plugins/fzf.lua
+
+# batteryWatcher service
+!.config/systemd/
+!.config/systemd/user/
+!.config/systemd/user/batteryWatcher.service
+
+# scripts
+!.config/scripts/
+!.config/scripts/batteryWatcher.sh
