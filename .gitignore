@@ -36,3 +36,7 @@
 !.images/wallpapers
 !.images/wallpapers/*
 *storybook.log
+
+# neofetch
+!.config/neofetch/
+!.config/neofetch/ascii
