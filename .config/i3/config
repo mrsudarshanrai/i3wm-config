@@ -35,6 +35,9 @@ exec feh --bg-fill $HOME/.images/wallpapers/wallpaper.jpg
 # start dunst (notification-daemon)
 exec --no-startup-id dunst
 
+# start mictray
+exec --no-startup-id mictray
+
 # start greenclip daemon (clipboard helper)
 exec --no-startup-id greenclip daemon
 
