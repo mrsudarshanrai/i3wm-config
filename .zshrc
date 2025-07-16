@@ -115,6 +115,9 @@ alias codes="cd $HOME/codes"
 # apps directory
 alias apps="cd $HOME/apps"
 
+# config directory
+alias config="cd $HOME/.config"
+
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
