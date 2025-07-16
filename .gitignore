@@ -40,3 +40,8 @@
 # neofetch
 !.config/neofetch/
 !.config/neofetch/ascii
+
+# dunst
+!.config/dunst/
+!.config/dunst/dunstrc
+
