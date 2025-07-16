@@ -132,6 +132,9 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # rust
 source "$HOME/.cargo/env"
 
+# go path
+export PATH=$PATH:/usr/local/go/bin
+
 export NODE_OPTIONS=--max_old_space_size=6144
 
 # bun completions
