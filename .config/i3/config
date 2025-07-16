@@ -213,6 +213,7 @@ exec --no-startup-id picom -b
 
 bar {
     font pango:Fira Code Retina 9
+    tray_output primary
     position top
     status_command /usr/bin/i3status-rs $HOME/.config/i3status-rust/config.toml
     colors {
@@ -223,11 +224,14 @@ bar {
         inactive_workspace #2c323b #2c323b #FFFFFF
         urgent_workspace #2f343a #900000 #ffffff
     }
+    mode dock
+    hidden_state hide
+    modifier Mod1
 }
 
 # i3 gaps
-# gaps inner 8
-# gaps outer 2
+gaps inner 8
+gaps outer 2
 
 # borders
 default_border none
