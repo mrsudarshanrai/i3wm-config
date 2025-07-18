@@ -72,7 +72,6 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-autosuggestions
   )
 
 source $ZSH/oh-my-zsh.sh
@@ -149,3 +148,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - bash)"
+
+#  zsh-autosuggestions
+source  ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
