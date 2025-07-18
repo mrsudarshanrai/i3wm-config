@@ -117,6 +117,9 @@ alias apps="cd $HOME/apps"
 # config directory
 alias config="cd $HOME/.config"
 
+# neofetch with custom ascii
+alias neofetch="neofetch --ascii $HOME/.config/neofetch/ascii"
+
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
