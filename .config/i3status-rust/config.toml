@@ -18,12 +18,11 @@ command = "echo \uf017"
 interval = "once"
 [[block.click]]
 button = "left"
-cmd = "~/timedoctor2/timedoctor2"
+cmd = "~/timedoctor/timedoctor"
 [block.theme_overrides]
 # idle_bg = "#2B4162"
 idle_fg = "#53a548"
 [block.icons_overrides]
-
 
 [[block]]
 block = "custom"
@@ -31,7 +30,15 @@ command = "echo \uf26c"
 interval = "once"
 [[block.click]]
 button = "left"
-cmd = "xrandr --output eDP-1 --mode 1920x1080 --pos 0x1080 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal"
+cmd = "xrandr --output eDP --off --output HDMI-A-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal"
+
+[[block]]
+block = "custom"
+command = "echo \uf08e" 
+interval = "once"
+[[block.click]]
+button = "left"
+cmd = "xrandr --output eDP --mode 1920x1080 --pos 0x1080 --rotate normal --output HDMI-A-0 --mode 1920x1080 --pos 0x0 --rotate normal"
 
 [[block]]
 block = "focused_window"
@@ -39,10 +46,25 @@ block = "focused_window"
 full = " $title.str(max_w:15) |"
 short = " $title.str(max_w:10) |"
 
+[[block]]
+block = "tea_timer"
+format = " \uf7b6  {$minutes:$seconds |}"
+done_cmd = "notify-send 'Timer Finished'"
+
 [block.theme_overrides]
 # idle_bg = "#2B4162"
 idle_fg = "#f7accf"
 [block.icons_overrides]
+
+[[block]]
+block = "bluetooth"
+mac = "98:A5:F9:54:92:55"
+disconnected_format = ""
+format = " $icon $name"
+[block.battery_state]
+"0..20" = "critical"
+"21..70" = "warning"
+"71..100" = "good"
 
 [[block]]
 block = "music"
@@ -53,10 +75,14 @@ player = "spotify"
 block = "net"
 format = " $icon {$signal_strength $ssid $frequency|Wired connection} via $device "
 [block.theme_overrides]
-
 # idle_bg = "#2B4162"
 idle_fg = "#04e824"
 [block.icons_overrides]
+
+[[block]]
+block = "speedtest"
+interval = 120
+format = "\uf063 $speed_down.eng(w:4,u:B) \uf062 $speed_up"
 
 [[block]]
 block = "sound"
@@ -76,35 +102,62 @@ cmd = "pavucontrol"
 # [block.icons_overrides]
 block = "battery"
 format = " $icon $percentage "
+charging_format=" \uf0e7 $percentage "
 
-#[[block]]
-#block = "cpu"
-#icons_format = "{icon} CPU"
-#[block.theme_overrides]
-# idle_bg = "#2B4162"
-#idle_fg = "#8651c9"
-#[block.icons_overrides]
-#cpu_boost_on = "ON"
-#cpu_boost_off = "OFF"
+[[block]]
+block = "load"
+format = " $icon 1min avg: $1m.eng(w:4) "
+interval = 1
 
-# [[block]]
-# block = "disk_space"
-# path = "/"
-# info_type = "available"
-# alert_unit = "GB"
-# interval = 10
-# warning = 20.0
-# alert = 10.0
-# format = " $icon SPACE $available.eng(w:2) "
+[[block]]
+block = "cpu"
+icons_format = "{icon} CPU"
+[block.theme_overrides]
+idle_bg = "#2B4162"
+idle_fg = "#8651c9"
+[block.icons_overrides]
+cpu_boost_on = "ON"
+cpu_boost_off = "OFF"
 
-#[[block]]
-#block = "memory"
-#format = " $icon MEMORY $mem_total_used_percents.eng(w:2) "
-#format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
-#[block.theme_overrides]
-# idle_bg = "#2B4162"
-#idle_fg = "#04E824"
-#[block.icons_overrides]
+
+[[block]]
+block = "memory"
+format = " $icon MEMORY $mem_total_used_percents.eng(w:2) "
+format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
+[block.theme_overrides]
+ idle_bg = "#2B4162"
+idle_fg = "#04E824"
+[block.icons_overrides]
+
+
+[[block]]
+block = "disk_space"
+path = "~/codes"
+info_type = "used"
+alert_unit = "MB"
+interval = 10
+format = " \uf802 $used.eng(w:2) "
+
+[[block]]
+block = "disk_space"
+path = "/home"
+info_type = "available"
+alert_unit = "GB"
+interval = 10
+warning = 20.0
+alert = 10.0
+format = " \ue1b0 /home $available.eng(w:2) "
+
+[[block]]
+block = "disk_space"
+path = "/"
+info_type = "available"
+alert_unit = "GB"
+interval = 10
+warning = 20.0
+alert = 10.0
+format = " $icon /-_- $available.eng(w:2) "
+
 
 [[block]]
 block = "uptime"
