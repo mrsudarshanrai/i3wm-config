@@ -14,18 +14,6 @@ idle_fg = "#abcdef"
 
 [[block]]
 block = "custom"
-command = "echo \uf017"
-interval = "once"
-[[block.click]]
-button = "left"
-cmd = "~/timedoctor/timedoctor"
-[block.theme_overrides]
-# idle_bg = "#2B4162"
-idle_fg = "#53a548"
-[block.icons_overrides]
-
-[[block]]
-block = "custom"
 command = "echo \uf26c" 
 interval = "once"
 [[block.click]]
