@@ -6,7 +6,7 @@
 !.xinitrc
 !.config
 !.images
-
+!README.md
 # i3-status-rust
 !.config/i3status-rust
 !.config/i3status-rust/config.toml
