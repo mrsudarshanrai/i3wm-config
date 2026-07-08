@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/home/fox/.config/scripts/batteryWatcher.sh
+ExecStart=%h/.config/scripts/batteryWatcher.sh
 WorkingDirectory=/tmp
 
 [Install]
