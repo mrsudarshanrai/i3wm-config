@@ -45,16 +45,6 @@ idle_fg = "#f7accf"
 [block.icons_overrides]
 
 [[block]]
-block = "bluetooth"
-mac = "98:A5:F9:54:92:55"
-disconnected_format = ""
-format = " $icon $name"
-[block.battery_state]
-"0..20" = "critical"
-"21..70" = "warning"
-"71..100" = "good"
-
-[[block]]
 block = "music"
 format = " $icon {$combo.str(max_w:20,rot_interval:0.5) $prev $play $next |}"
 player = "spotify"
