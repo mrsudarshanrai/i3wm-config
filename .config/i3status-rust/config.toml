@@ -132,7 +132,7 @@ idle_fg = "#04E824"
 
 [[block]]
 block = "disk_space"
-path = "~/codes"
+path = "~/projects"
 info_type = "used"
 alert_unit = "MB"
 interval = 10
