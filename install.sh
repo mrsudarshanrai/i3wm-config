@@ -118,6 +118,17 @@ ensure_projects_dir() {
   mkdir -p "$HOME/projects"
 }
 
+ensure_zsh_autosuggestions() {
+  local plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+  if [ -d "$plugin_dir" ]; then
+    log_info "zsh-autosuggestions already present, skipping"
+    return
+  fi
+  mkdir -p "$(dirname "$plugin_dir")"
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$plugin_dir"
+  log_ok "zsh-autosuggestions installed"
+}
+
 enable_services() {
   systemctl --user daemon-reload
   systemctl --user enable --now batteryWatcher.service
@@ -186,6 +197,7 @@ main() {
   section "Deploying dotfiles"
   deploy_dotfiles
   ensure_projects_dir
+  ensure_zsh_autosuggestions
 
   section "Enabling services"
   enable_services
