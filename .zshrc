@@ -103,21 +103,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# xrandr
-alias xrauto="xrandr --auto"
-
-# nemovim alias
-alias nv="nvim"
-
-# codes directory
-alias codes="cd $HOME/codes"
-
-# apps directory
-alias apps="cd $HOME/apps"
-
-# config directory
-alias config="cd $HOME/.config"
-
 # neofetch with custom ascii
 alias neofetch="neofetch --ascii $HOME/.config/neofetch/ascii"
 
