@@ -7,6 +7,7 @@
 !.config
 !.images
 !README.md
+!install.sh
 # i3-status-rust
 !.config/i3status-rust
 !.config/i3status-rust/config.toml
