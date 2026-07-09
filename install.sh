@@ -94,7 +94,12 @@ ensure_projects_dir() {
 enable_services() {
   systemctl --user daemon-reload
   systemctl --user enable --now batteryWatcher.service
-  sudo systemctl enable ly.service
+  # ly ships a per-tty template unit, not a plain ly.service (see ArchWiki:Ly) —
+  # enable it on tty1 and disable the getty it replaces there.
+  sudo systemctl disable getty@tty1.service ||
+    echo "warning: could not disable getty@tty1.service"
+  sudo systemctl enable ly@tty1.service ||
+    echo "warning: could not enable ly@tty1.service (check that the ly package installed correctly)"
 }
 
 spawn_if_missing() {
