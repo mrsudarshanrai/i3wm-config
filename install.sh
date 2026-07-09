@@ -87,6 +87,10 @@ deploy_dotfiles() {
   [ "$backed_up" = 1 ] && echo "Existing files backed up to $backup_dir"
 }
 
+ensure_projects_dir() {
+  mkdir -p "$HOME/projects"
+}
+
 enable_services() {
   systemctl --user daemon-reload
   systemctl --user enable --now batteryWatcher.service
@@ -134,6 +138,7 @@ main() {
   ensure_yay
   install_aur_packages
   deploy_dotfiles
+  ensure_projects_dir
   enable_services
   start_autostart_apps
   final_message
