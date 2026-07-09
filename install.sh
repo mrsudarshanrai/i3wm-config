@@ -52,7 +52,16 @@ ensure_yay() {
   (cd "$build_dir" && makepkg -si --needed)
 }
 
+remove_conflicting_i3lock() {
+  if pacman -Qi i3lock >/dev/null 2>&1; then
+    echo "Removing stock i3lock (conflicts with i3lock-color)..."
+    sudo pacman -R --noconfirm i3lock ||
+      echo "warning: could not remove i3lock automatically; remove it manually before re-running"
+  fi
+}
+
 install_aur_packages() {
+  remove_conflicting_i3lock
   yay -S --needed "${AUR_PACKAGES[@]}"
 }
 
