@@ -2,25 +2,43 @@
 
 Personal dotfiles for an **_i3-based_** Linux desktop, managed with `~/.config` as the repository root. Covers the window manager, status bar, launcher, notifications, compositor, terminal, editor, and a few helper scripts/services.
 
-## Prerequisites
+## Install
 
-Install these before using this config. On Arch Linux:
+`./install.sh` automates everything below: installs all packages (official + AUR, via `yay` — bootstrapped automatically if missing), symlinks every tracked file from the clone into `$HOME` (backing up any conflicting existing files under `~/.dotfiles-backup/<timestamp>/`), enables the `batteryWatcher` and `ly` services, and starts the autostart apps (`guake`, `dunst`, `mictray`, `picom`, `greenclip`, `xss-lock`) immediately if you're already in an X session.
 
 ```sh
-# official repos (required)
-sudo pacman -S i3status-rust i3lock rofi dunst picom guake feh ttf-fira-code zsh speedtest-cli
+git clone <this-repo-url> ~/i3-config
+cd ~/i3-config
+./install.sh
+```
 
-# AUR packages (required)
-greenclip mictray i3lock-color neofetch-git otf-font-awesome rofi-greenclip
+Requires Arch Linux (`pacman`) and must be run from inside a git clone of this repo (not a bare copy of the files).
+
+## Prerequisites
+
+The package lists `install.sh` installs, for reference (or manual install):
+
+```sh
+# official repos
+sudo pacman -S i3-wm i3status-rust rofi dunst picom guake feh nemo \
+  otf-font-awesome ttf-fira-code zsh speedtest-cli \
+  iwd xss-lock \
+  pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol \
+  xorg-xinit dex ly papirus-icon-theme capitaine-cursors base-devel git
+
+# AUR (via yay)
+yay -S i3lock-color rofi-greenclip mictray neofetch-git qogir-gtk-theme
 ```
 
 Notes:
 
 - `rofi` must be installed before configuring this setup, as it is used for launching applications and managing clipboard history.
 - `i3status-rust` is a Rust-based status bar that replaces the default `i3status`. It is configured via `i3status-rust/config.toml`.
-- `greenclip` is a clipboard manager that integrates with Rofi. It is configured via `rofi/config.rasi`.
-- The status bar's `bluetooth` block expects `bluez`/`bluez-utils` with a Bluetooth adapter present, and its MAC address should be updated in `i3status-rust/config.toml`.
-- `i3lock/lock.sh` uses coloring/blur flags (`--ring-color`, `--insidever-color`, `--blur`, etc.) that only the [`i3lock-color`](https://github.com/Raymo111/i3lock-color) fork supports. Install `i3lock-color` (AUR) instead of stock `i3lock`, or the lock script will fail.
+- `rofi-greenclip` provides the `greenclip` binary (there's no separate `greenclip` package) — it's the clipboard manager that integrates with Rofi, configured via `rofi/config.rasi`.
+- `i3lock/lock.sh` uses coloring/blur flags (`--ring-color`, `--insidever-color`, `--blur`, etc.) that only the [`i3lock-color`](https://github.com/Raymo111/i3lock-color) fork supports. Only install `i3lock-color` (AUR) — installing stock `i3lock` alongside/instead of it will make the lock script fail with missing-option errors.
+- `gtk-3.0/settings.ini` pulls in three separate theme packages: `qogir-gtk-theme` (AUR, the GTK theme itself), `papirus-icon-theme` (icon theme), and `capitaine-cursors` (cursor theme).
+- `ly` is a TUI login manager/greeter; `install.sh` only `enable`s it (not `--now`), so it takes over at the next reboot instead of disrupting your current session.
+- Networking uses `iwd` directly, not NetworkManager — `i3/config` has its `nm-applet` autostart line commented out.
 
 ## Layout
 
@@ -43,6 +61,7 @@ Notes:
 | `.xinitrc`                            | X session startup script (currently the distro-default template — starts `twm`/`xterm`/`xfce4`, does not launch i3 directly) |
 | `.zshrc`                              | Zsh config, oh-my-zsh with the `robbyrussell` theme                                                                          |
 | `.zshenv`                             | Sources `~/.cargo/env` for every zsh shell                                                                                   |
+| `install.sh`                          | Installs all packages and symlinks every tracked file into `$HOME`                                                          |
 
 ## Window manager (i3)
 
@@ -98,4 +117,4 @@ systemctl --user enable --now batteryWatcher.service
 
 ## Usage
 
-This directory is meant to be symlinked or cloned directly to `~/.config` on an Arch-based i3 setup. Dependencies used across the configs include: `i3`, `i3lock`, `i3status-rust`, `rofi`, `dunst`, `picom`, `guake`, `greenclip`, `feh`, `mictray`, `nm-applet`, `neofetch`, `pactl`/PulseAudio, and Neovim with `lazy.nvim`.
+See [Install](#install) above — clone the repo and run `./install.sh` on an Arch-based i3 setup. Dependencies used across the configs include: `i3`, `i3lock-color`, `i3status-rust`, `rofi`, `dunst`, `picom`, `guake`, `greenclip`, `feh`, `mictray`, `iwd`, `neofetch`, PipeWire/`pactl`, and Neovim with `lazy.nvim`.
