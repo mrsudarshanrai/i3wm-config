@@ -99,11 +99,24 @@ ensure_oh_my_zsh() {
   fi
   log_info "installing oh-my-zsh..."
   # RUNZSH=no: don't drop into a new zsh shell at the end (would hang this script).
-  # CHSH=no: don't change the login shell non-interactively; do that yourself if wanted.
+  # CHSH=no: its own chsh prompt is interactive; set_default_shell below handles it instead.
   # KEEP_ZSHRC=no: let it write its default .zshrc — deploy_dotfiles below immediately
   # backs that up and symlinks our own tracked .zshrc over it.
   RUNZSH=no CHSH=no KEEP_ZSHRC=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   log_ok "oh-my-zsh installed"
+}
+
+set_default_shell() {
+  local zsh_path current_shell
+  zsh_path="$(command -v zsh)"
+  current_shell="$(getent passwd "$(whoami)" | cut -d: -f7)"
+  if [ "$current_shell" = "$zsh_path" ]; then
+    log_info "zsh is already the default shell, skipping"
+    return
+  fi
+  sudo chsh -s "$zsh_path" "$(whoami)" &&
+    log_ok "default shell changed to zsh (takes effect on next login)" ||
+    log_warn "could not change default shell to zsh"
 }
 
 deploy_dotfiles() {
@@ -210,6 +223,7 @@ main() {
 
   section "Setting up zsh"
   ensure_oh_my_zsh
+  set_default_shell
 
   section "Deploying dotfiles"
   deploy_dotfiles
