@@ -37,7 +37,7 @@ PACMAN_PACKAGES=(
   pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol
   xorg-xinit dex ly
   papirus-icon-theme capitaine-cursors
-  base-devel git
+  base-devel git curl
 )
 
 AUR_PACKAGES=(
@@ -90,6 +90,20 @@ remove_conflicting_i3lock() {
 install_aur_packages() {
   remove_conflicting_i3lock
   yay -S --needed "${AUR_PACKAGES[@]}"
+}
+
+ensure_oh_my_zsh() {
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+    log_info "oh-my-zsh already installed, skipping"
+    return
+  fi
+  log_info "installing oh-my-zsh..."
+  # RUNZSH=no: don't drop into a new zsh shell at the end (would hang this script).
+  # CHSH=no: don't change the login shell non-interactively; do that yourself if wanted.
+  # KEEP_ZSHRC=no: let it write its default .zshrc — deploy_dotfiles below immediately
+  # backs that up and symlinks our own tracked .zshrc over it.
+  RUNZSH=no CHSH=no KEEP_ZSHRC=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  log_ok "oh-my-zsh installed"
 }
 
 deploy_dotfiles() {
@@ -194,9 +208,14 @@ main() {
   ensure_yay
   install_aur_packages
 
+  section "Setting up zsh"
+  ensure_oh_my_zsh
+
   section "Deploying dotfiles"
   deploy_dotfiles
   ensure_projects_dir
+
+  section "Installing zsh plugins"
   ensure_zsh_autosuggestions
 
   section "Enabling services"
