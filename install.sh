@@ -128,6 +128,12 @@ start_autostart_apps() {
   feh --bg-fill "$HOME/.images/wallpapers/wallpaper.jpg"
 }
 
+reload_i3() {
+  if [ -n "${DISPLAY:-}" ] && command -v i3-msg >/dev/null 2>&1; then
+    i3-msg reload >/dev/null 2>&1 && echo "i3 config reloaded" || echo "warning: i3-msg reload failed"
+  fi
+}
+
 final_message() {
   echo
   echo "Setup complete."
@@ -146,6 +152,7 @@ main() {
   ensure_projects_dir
   enable_services
   start_autostart_apps
+  reload_i3
   final_message
 }
 
