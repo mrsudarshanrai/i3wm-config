@@ -1,11 +1,11 @@
 [Unit]
-Description=Watch battery percentage and notify if less than 20%
-After=network.target
+Description=Watch battery percentage and send low-battery notifications
+ConditionPathExists=/sys/class/power_supply/BAT0
 
 [Service]
 Type=simple
 ExecStart=%h/.config/scripts/batteryWatcher.sh
-WorkingDirectory=/tmp
+Restart=on-failure
 
 [Install]
 WantedBy=default.target

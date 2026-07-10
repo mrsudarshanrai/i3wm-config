@@ -103,54 +103,45 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# xrandr
-alias xrauto="xrandr --auto"
-
-# nemovim alias
-alias nv="nvim"
-
-# codes directory
-alias codes="cd $HOME/codes"
-
-# apps directory
-alias apps="cd $HOME/apps"
-
-# config directory
-alias config="cd $HOME/.config"
-
 # neofetch with custom ascii
 alias neofetch="neofetch --ascii $HOME/.config/neofetch/ascii"
 
 # nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 # java/android
-export ANDROID_HOME=$HOME/Android/Sdk
-export JAVA_HOME=/usr/bin/java
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+if [ -d "$HOME/Android/Sdk" ]; then
+  export ANDROID_HOME="$HOME/Android/Sdk"
+  export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
+fi
+# /usr/lib/jvm/default is the archlinux-java managed symlink
+[ -d /usr/lib/jvm/default ] && export JAVA_HOME=/usr/lib/jvm/default
 
 # rust
-source "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # go path
-export PATH=$PATH:/usr/local/go/bin
+[ -d /usr/local/go/bin ] && export PATH="$PATH:/usr/local/go/bin"
 
-export NODE_OPTIONS=--max_old_space_size=6144
-
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+command -v node >/dev/null 2>&1 && export NODE_OPTIONS=--max_old_space_size=6144
 
 # bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH" 
+if [ -d "$HOME/.bun" ]; then
+  export BUN_INSTALL="$HOME/.bun"
+  export PATH="$BUN_INSTALL/bin:$PATH"
+  [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"  # bun completions
+fi
 
-
-# python path 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - bash)"
-
+# python path
+if [ -d "$HOME/.pyenv" ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  [ -d "$PYENV_ROOT/bin" ] && export PATH="$PYENV_ROOT/bin:$PATH"
+  # --no-rehash: skip rehash on shell startup — concurrent shells at login race
+  # on the shims lock file and error out; rehash runs on pyenv install anyway
+  command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - --no-rehash zsh)"
+fi
 

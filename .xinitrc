@@ -1,12 +1,7 @@
 #!/bin/sh
 
-prefix="/usr"
-exec_prefix="${prefix}"
 xrdb="xrdb"
 xinitdir="/etc/X11/xinit"
-xclock="xclock"
-xterm="xterm"
-twm="twm"
 xmodmap="xmodmap"
 
 userresources="$HOME/.Xresources"
@@ -49,11 +44,5 @@ if [ -d "$xinitdir"/xinitrc.d ]; then
   unset f
 fi
 
-"$twm" &
-"$xclock" -geometry 50x50-1+1 &
-"$xterm" -geometry 80x50+494+51 &
-"$xterm" -geometry 80x20+494-0 &
-exec "$xterm" -geometry 80x66+0+0 -name login
-
-# start xfce4
-exec startxfce4
+# start i3
+exec i3

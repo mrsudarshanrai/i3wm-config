@@ -66,11 +66,10 @@ format = "\uf063 $speed_down.eng(w:4,u:B) \uf062 $speed_up"
 block = "sound"
 [[block.click]]
 button = "left"
+cmd = "pavucontrol"
 [block.theme_overrides]
 # idle_bg = "#2B4162"
 idle_fg = "#8651c9"
-[block.icons_overrides]
-cmd = "pavucontrol"
 
 
 [[block]]

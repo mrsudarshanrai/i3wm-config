@@ -1,0 +1,275 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ -t 1 ]; then
+  BOLD=$'\033[1m'; RESET=$'\033[0m'
+  RED=$'\033[31m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'
+  BLUE=$'\033[34m'; MAGENTA=$'\033[35m'; CYAN=$'\033[36m'
+else
+  BOLD=""; RESET=""; RED=""; GREEN=""; YELLOW=""; BLUE=""; MAGENTA=""; CYAN=""
+fi
+
+log_info()  { printf '%s[*]%s %s\n' "$BLUE" "$RESET" "$*"; }
+log_ok()    { printf '%s[+]%s %s\n' "$GREEN" "$RESET" "$*"; }
+log_warn()  { printf '%s[!]%s %s\n' "$YELLOW" "$RESET" "$*" >&2; }
+log_error() { printf '%s[x]%s %s\n' "$RED" "$RESET" "$*" >&2; }
+section()  { printf '\n%s%s==>%s %s%s%s\n' "$BOLD" "$MAGENTA" "$RESET" "$BOLD" "$*" "$RESET"; }
+
+banner() {
+  printf '%s' "$CYAN"
+  cat <<'ART'
+   ░▒▓█▓▒░▒▓███████▓▒░▒▓███████▓▒░░▒▓████████▓▒░
+░▒▓████▓▒░      ░▒▓█▓▒░     ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░
+   ░▒▓█▓▒░      ░▒▓█▓▒░     ░▒▓█▓▒░      ░▒▓█▓▒░
+   ░▒▓█▓▒░▒▓███████▓▒░▒▓███████▓▒░      ░▒▓█▓▒░
+   ░▒▓█▓▒░      ░▒▓█▓▒░     ░▒▓█▓▒░     ░▒▓█▓▒░
+   ░▒▓█▓▒░      ░▒▓█▓▒░     ░▒▓█▓▒░    ░▒▓█▓▒░
+   ░▒▓█▓▒░▒▓███████▓▒░▒▓███████▓▒░     ░▒▓█▓▒░
+ART
+  printf '%s%si3-config installer%s\n' "$RESET" "$BOLD" "$RESET"
+}
+
+PACMAN_PACKAGES=(
+  i3-wm i3status-rust rofi dunst picom guake feh nemo
+  otf-font-awesome ttf-fira-code zsh speedtest-cli
+  iwd xss-lock
+  pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol
+  xorg-xinit dex ly
+  papirus-icon-theme capitaine-cursors
+  base-devel git curl
+)
+
+AUR_PACKAGES=(
+  i3lock-color
+  rofi-greenclip
+  mictray
+  neofetch-git
+  qogir-gtk-theme
+)
+
+require_arch() {
+  command -v pacman >/dev/null 2>&1 || {
+    log_error "This script only supports Arch Linux (pacman not found)."
+    exit 1
+  }
+}
+
+require_git_repo() {
+  git -C "$REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+    log_error "install.sh must be run from inside a git clone of this repo."
+    exit 1
+  }
+}
+
+install_pacman_packages() {
+  sudo pacman -S --needed "${PACMAN_PACKAGES[@]}"
+}
+
+ensure_yay() {
+  command -v yay >/dev/null 2>&1 && return
+  log_info "yay not found, bootstrapping it from the AUR..."
+  local build_dir="$HOME/.cache/aur-builds/yay"
+  mkdir -p "$(dirname "$build_dir")"
+  if [ -d "$build_dir" ]; then
+    git -C "$build_dir" pull
+  else
+    git clone https://aur.archlinux.org/yay.git "$build_dir"
+  fi
+  (cd "$build_dir" && makepkg -si --needed)
+}
+
+remove_conflicting_i3lock() {
+  if pacman -Qi i3lock >/dev/null 2>&1; then
+    log_info "Removing stock i3lock (conflicts with i3lock-color)..."
+    sudo pacman -R --noconfirm i3lock ||
+      log_warn "could not remove i3lock automatically; remove it manually before re-running"
+  fi
+}
+
+install_aur_packages() {
+  remove_conflicting_i3lock
+  yay -S --needed "${AUR_PACKAGES[@]}"
+}
+
+ensure_oh_my_zsh() {
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+    log_info "oh-my-zsh already installed, skipping"
+    return
+  fi
+  log_info "installing oh-my-zsh..."
+  # RUNZSH=no: don't drop into a new zsh shell at the end (would hang this script).
+  # CHSH=no: its own chsh prompt is interactive; set_default_shell below handles it instead.
+  # KEEP_ZSHRC=no: let it write its default .zshrc — deploy_dotfiles below immediately
+  # backs that up and symlinks our own tracked .zshrc over it.
+  RUNZSH=no CHSH=no KEEP_ZSHRC=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  log_ok "oh-my-zsh installed"
+}
+
+set_default_shell() {
+  local zsh_path current_shell
+  zsh_path="$(command -v zsh)"
+  current_shell="$(getent passwd "$(whoami)" | cut -d: -f7)"
+  if [ "$current_shell" = "$zsh_path" ]; then
+    log_info "zsh is already the default shell, skipping"
+    return
+  fi
+  sudo chsh -s "$zsh_path" "$(whoami)" &&
+    log_ok "default shell changed to zsh (takes effect on next login)" ||
+    log_warn "could not change default shell to zsh"
+}
+
+deploy_dotfiles() {
+  # If the repo IS $HOME (tracked-home setup), files are already in place;
+  # symlinking would back each file up and leave a self-referencing link behind.
+  if [ "$(readlink -f "$REPO_DIR")" = "$(readlink -f "$HOME")" ]; then
+    log_info "repo root is \$HOME itself; files already in place, skipping symlinks"
+    return
+  fi
+  local backup_dir="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+  local backed_up=0
+  local file src dest
+  while IFS= read -r -d '' file; do
+    # templated, not symlinked — see configure_guake
+    [ "$file" = ".config/guake/guake_prefs.cfg" ] && continue
+    src="$REPO_DIR/$file"
+    dest="$HOME/$file"
+    if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$src")" ]; then
+      continue
+    fi
+    mkdir -p "$(dirname "$dest")"
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+      mkdir -p "$(dirname "$backup_dir/$file")"
+      mv "$dest" "$backup_dir/$file"
+      backed_up=1
+    fi
+    ln -s "$src" "$dest"
+    log_ok "linked ~/$file"
+  done < <(git -C "$REPO_DIR" ls-files -z)
+  if [ "$backed_up" = 1 ]; then
+    log_warn "existing files backed up to $backup_dir"
+  fi
+}
+
+ensure_projects_dir() {
+  mkdir -p "$HOME/projects"
+}
+
+configure_guake() {
+  local template="$REPO_DIR/.config/guake/guake_prefs.cfg"
+  [ -f "$template" ] || return
+  # guake reads its live settings from dconf, not this file — it's just an
+  # export/import snapshot, and does no ~/$HOME expansion on paths within it
+  mkdir -p "$HOME/.config/guake"
+  sed "s|{{HOME}}|$HOME|g" "$template" >"$HOME/.config/guake/guake_prefs.cfg"
+  if command -v dconf >/dev/null 2>&1; then
+    dconf load /org/guake/ <"$HOME/.config/guake/guake_prefs.cfg" &&
+      log_ok "guake preferences loaded" ||
+      log_warn "could not load guake preferences into dconf"
+  else
+    log_warn "dconf not found; guake preferences written but not loaded"
+  fi
+}
+
+ensure_zsh_autosuggestions() {
+  local plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+  if [ -d "$plugin_dir" ]; then
+    log_info "zsh-autosuggestions already present, skipping"
+    return
+  fi
+  mkdir -p "$(dirname "$plugin_dir")"
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$plugin_dir"
+  log_ok "zsh-autosuggestions installed"
+}
+
+enable_services() {
+  systemctl --user daemon-reload || log_warn "could not reload systemd user units"
+  systemctl --user enable --now batteryWatcher.service &&
+    log_ok "batteryWatcher.service enabled" ||
+    log_warn "could not enable batteryWatcher.service"
+  # ly ships a per-tty template unit, not a plain ly.service (see ArchWiki:Ly) —
+  # enable it on tty1 and disable the getty it replaces there.
+  sudo systemctl disable getty@tty1.service ||
+    log_warn "could not disable getty@tty1.service"
+  sudo systemctl enable ly@tty1.service &&
+    log_ok "ly@tty1.service enabled" ||
+    log_warn "could not enable ly@tty1.service (check that the ly package installed correctly)"
+}
+
+spawn_if_missing() {
+  local proc_name="$1"
+  shift
+  if pgrep -x "$proc_name" >/dev/null 2>&1; then
+    log_info "$proc_name already running, skipping"
+    return
+  fi
+  "$@" >/dev/null 2>&1 &
+  disown 2>/dev/null || true
+  log_ok "started $proc_name"
+}
+
+start_autostart_apps() {
+  if [ -z "${DISPLAY:-}" ]; then
+    log_warn "no active X session detected; autostart apps will start on next graphical login"
+    return
+  fi
+  spawn_if_missing guake guake
+  spawn_if_missing dunst dunst
+  spawn_if_missing mictray mictray
+  spawn_if_missing picom picom -b
+  spawn_if_missing greenclip greenclip daemon
+  spawn_if_missing xss-lock xss-lock --transfer-sleep-lock -- bash "$HOME/.config/i3lock/lock.sh"
+  feh --bg-fill "$HOME/.images/wallpapers/wallpaper.jpg" &&
+    log_ok "wallpaper set" ||
+    log_warn "could not set wallpaper"
+}
+
+reload_i3() {
+  if [ -n "${DISPLAY:-}" ] && command -v i3-msg >/dev/null 2>&1; then
+    i3-msg reload >/dev/null 2>&1 && log_ok "i3 config reloaded" || log_warn "i3-msg reload failed"
+  fi
+}
+
+final_message() {
+  printf '\n%s%s✓ Setup complete.%s\n' "$BOLD" "$GREEN" "$RESET"
+  if [ -z "${DISPLAY:-}" ]; then
+    log_info "reboot (for the ly login manager) or log in graphically to start everything"
+  fi
+}
+
+main() {
+  banner
+  require_arch
+  require_git_repo
+
+  section "Installing official packages"
+  install_pacman_packages
+
+  section "Installing AUR packages"
+  ensure_yay
+  install_aur_packages
+
+  section "Setting up zsh"
+  ensure_oh_my_zsh
+  set_default_shell
+
+  section "Deploying dotfiles"
+  deploy_dotfiles
+  ensure_projects_dir
+  configure_guake
+
+  section "Installing zsh plugins"
+  ensure_zsh_autosuggestions
+
+  section "Enabling services"
+  enable_services
+
+  section "Starting autostart apps"
+  start_autostart_apps
+  reload_i3
+
+  final_message
+}
+
+main "$@"

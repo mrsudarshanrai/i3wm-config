@@ -7,6 +7,7 @@
 !.config
 !.images
 !README.md
+!install.sh
 # i3-status-rust
 !.config/i3status-rust
 !.config/i3status-rust/config.toml
@@ -33,9 +34,7 @@
 
 
 # wallpaper
-!.images/wallpapers
-!.images/wallpapers/*
-*storybook.log
+!.images/*
 
 # neofetch
 !.config/neofetch/
@@ -55,6 +54,10 @@
 !.config/nvim/lua/plugins/lsp.lua
 !.config/nvim/lua/plugins/tokyoNight.lua
 !.config/nvim/lua/plugins/fzf.lua
+
+# guake 
+!.config/guake/
+!.config/guake/guake_prefs.cfg
 
 # batteryWatcher service
 !.config/systemd/
