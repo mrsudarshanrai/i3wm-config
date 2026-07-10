@@ -52,7 +52,7 @@ Notes(For manual installk):
 | `picom/picom.conf`                    | Compositor: shadows, blur, fading                                                                              |
 | `gtk-3.0/settings.ini`                | GTK theme, icon theme, cursor theme                                                                            |
 | `nvim/`                               | Neovim config, built on LazyVim                                                                                |
-| `guake/`                              | Dropdown terminal settings (not tracked in this repo; local `~/.config/guake` state)                           |
+| `guake/guake_prefs.cfg`               | Dropdown terminal preferences, exported from dconf (`{{HOME}}` templated, loaded via `dconf load` by `install.sh`) |
 | `nemo/`                               | File manager settings (not tracked in this repo; local `~/.config/nemo` state)                                 |
 | `neofetch/ascii`                      | Custom ASCII art for neofetch                                                                                  |
 | `scripts/batteryWatcher.sh`           | Polls battery level and sends low-battery notifications                                                        |
