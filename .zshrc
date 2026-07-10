@@ -116,9 +116,10 @@ fi
 # java/android
 if [ -d "$HOME/Android/Sdk" ]; then
   export ANDROID_HOME="$HOME/Android/Sdk"
-  export JAVA_HOME=/usr/bin/java
   export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
 fi
+# /usr/lib/jvm/default is the archlinux-java managed symlink
+[ -d /usr/lib/jvm/default ] && export JAVA_HOME=/usr/lib/jvm/default
 
 # rust
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
@@ -139,6 +140,8 @@ fi
 if [ -d "$HOME/.pyenv" ]; then
   export PYENV_ROOT="$HOME/.pyenv"
   [ -d "$PYENV_ROOT/bin" ] && export PATH="$PYENV_ROOT/bin:$PATH"
-  command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
+  # --no-rehash: skip rehash on shell startup — concurrent shells at login race
+  # on the shims lock file and error out; rehash runs on pyenv install anyway
+  command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - --no-rehash zsh)"
 fi
 
