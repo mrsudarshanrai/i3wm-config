@@ -11,9 +11,10 @@ else
   BOLD=""; RESET=""; RED=""; GREEN=""; YELLOW=""; BLUE=""; MAGENTA=""; CYAN=""
 fi
 
-log_info() { printf '%s[*]%s %s\n' "$BLUE" "$RESET" "$*"; }
-log_ok()   { printf '%s[+]%s %s\n' "$GREEN" "$RESET" "$*"; }
-log_warn() { printf '%s[!]%s %s\n' "$YELLOW" "$RESET" "$*" >&2; }
+log_info()  { printf '%s[*]%s %s\n' "$BLUE" "$RESET" "$*"; }
+log_ok()    { printf '%s[+]%s %s\n' "$GREEN" "$RESET" "$*"; }
+log_warn()  { printf '%s[!]%s %s\n' "$YELLOW" "$RESET" "$*" >&2; }
+log_error() { printf '%s[x]%s %s\n' "$RED" "$RESET" "$*" >&2; }
 section()  { printf '\n%s%s==>%s %s%s%s\n' "$BOLD" "$MAGENTA" "$RESET" "$BOLD" "$*" "$RESET"; }
 
 banner() {
@@ -50,14 +51,14 @@ AUR_PACKAGES=(
 
 require_arch() {
   command -v pacman >/dev/null 2>&1 || {
-    echo "This script only supports Arch Linux (pacman not found)." >&2
+    log_error "This script only supports Arch Linux (pacman not found)."
     exit 1
   }
 }
 
 require_git_repo() {
   git -C "$REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
-    echo "install.sh must be run from inside a git clone of this repo." >&2
+    log_error "install.sh must be run from inside a git clone of this repo."
     exit 1
   }
 }
@@ -120,6 +121,12 @@ set_default_shell() {
 }
 
 deploy_dotfiles() {
+  # If the repo IS $HOME (tracked-home setup), files are already in place;
+  # symlinking would back each file up and leave a self-referencing link behind.
+  if [ "$(readlink -f "$REPO_DIR")" = "$(readlink -f "$HOME")" ]; then
+    log_info "repo root is \$HOME itself; files already in place, skipping symlinks"
+    return
+  fi
   local backup_dir="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
   local backed_up=0
   local file src dest
@@ -138,7 +145,9 @@ deploy_dotfiles() {
     ln -s "$src" "$dest"
     log_ok "linked ~/$file"
   done < <(git -C "$REPO_DIR" ls-files -z)
-  [ "$backed_up" = 1 ] && log_warn "existing files backed up to $backup_dir"
+  if [ "$backed_up" = 1 ]; then
+    log_warn "existing files backed up to $backup_dir"
+  fi
 }
 
 ensure_projects_dir() {
@@ -157,9 +166,10 @@ ensure_zsh_autosuggestions() {
 }
 
 enable_services() {
-  systemctl --user daemon-reload
-  systemctl --user enable --now batteryWatcher.service
-  log_ok "batteryWatcher.service enabled"
+  systemctl --user daemon-reload || log_warn "could not reload systemd user units"
+  systemctl --user enable --now batteryWatcher.service &&
+    log_ok "batteryWatcher.service enabled" ||
+    log_warn "could not enable batteryWatcher.service"
   # ly ships a per-tty template unit, not a plain ly.service (see ArchWiki:Ly) —
   # enable it on tty1 and disable the getty it replaces there.
   sudo systemctl disable getty@tty1.service ||
@@ -192,8 +202,9 @@ start_autostart_apps() {
   spawn_if_missing picom picom -b
   spawn_if_missing greenclip greenclip daemon
   spawn_if_missing xss-lock xss-lock --transfer-sleep-lock -- bash "$HOME/.config/i3lock/lock.sh"
-  feh --bg-fill "$HOME/.images/wallpapers/wallpaper.jpg"
-  log_ok "wallpaper set"
+  feh --bg-fill "$HOME/.images/wallpapers/wallpaper.jpg" &&
+    log_ok "wallpaper set" ||
+    log_warn "could not set wallpaper"
 }
 
 reload_i3() {
