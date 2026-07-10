@@ -57,6 +57,10 @@
 !.config/nvim/lua/plugins/tokyoNight.lua
 !.config/nvim/lua/plugins/fzf.lua
 
+# guake 
+!.config/guake/
+!.config/guake/guake_prefs.cfg
+
 # batteryWatcher service
 !.config/systemd/
 !.config/systemd/user/
