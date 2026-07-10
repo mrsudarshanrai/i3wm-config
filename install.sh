@@ -131,6 +131,8 @@ deploy_dotfiles() {
   local backed_up=0
   local file src dest
   while IFS= read -r -d '' file; do
+    # templated, not symlinked — see configure_guake
+    [ "$file" = ".config/guake/guake_prefs.cfg" ] && continue
     src="$REPO_DIR/$file"
     dest="$HOME/$file"
     if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$src")" ]; then
@@ -152,6 +154,22 @@ deploy_dotfiles() {
 
 ensure_projects_dir() {
   mkdir -p "$HOME/projects"
+}
+
+configure_guake() {
+  local template="$REPO_DIR/.config/guake/guake_prefs.cfg"
+  [ -f "$template" ] || return
+  # guake reads its live settings from dconf, not this file — it's just an
+  # export/import snapshot, and does no ~/$HOME expansion on paths within it
+  mkdir -p "$HOME/.config/guake"
+  sed "s|{{HOME}}|$HOME|g" "$template" >"$HOME/.config/guake/guake_prefs.cfg"
+  if command -v dconf >/dev/null 2>&1; then
+    dconf load /org/guake/ <"$HOME/.config/guake/guake_prefs.cfg" &&
+      log_ok "guake preferences loaded" ||
+      log_warn "could not load guake preferences into dconf"
+  else
+    log_warn "dconf not found; guake preferences written but not loaded"
+  fi
 }
 
 ensure_zsh_autosuggestions() {
@@ -239,6 +257,7 @@ main() {
   section "Deploying dotfiles"
   deploy_dotfiles
   ensure_projects_dir
+  configure_guake
 
   section "Installing zsh plugins"
   ensure_zsh_autosuggestions
