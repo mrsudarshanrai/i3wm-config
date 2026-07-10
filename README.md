@@ -2,6 +2,12 @@
 
 Personal dotfiles for an **_i3-based_** Linux desktop, managed with `~/.config` as the repository root. Covers the window manager, status bar, launcher, notifications, compositor, terminal, editor, and a few helper scripts/services.
 
+## Screenshots
+
+| Desktop & status bar | Guake (neofetch / onefetch) | Rofi launcher |
+| :---: | :---: | :---: |
+| ![Desktop](.images/d1.png) | ![Guake terminal](.images/d2.png) | ![Rofi launcher](.images/d3.png) |
+
 ## Install
 
 `./install.sh` automates everything below: installs all packages (official + AUR, via `yay` — bootstrapped automatically if missing), symlinks every tracked file from the clone into `$HOME` (backing up any conflicting existing files under `~/.dotfiles-backup/<timestamp>/`), enables the `batteryWatcher` and `ly` services, and starts the autostart apps (`guake`, `dunst`, `mictray`, `picom`, `greenclip`, `xss-lock`) immediately if you're already in an X session.
