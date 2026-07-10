@@ -34,9 +34,7 @@
 
 
 # wallpaper
-!.images/wallpapers
-!.images/wallpapers/*
-*storybook.log
+!.images/*
 
 # neofetch
 !.config/neofetch/
