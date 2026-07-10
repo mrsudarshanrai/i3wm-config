@@ -14,7 +14,7 @@ cd ~/i3-config
 
 Requires Arch Linux (`pacman`) and must be run from inside a git clone of this repo (not a bare copy of the files).
 
-## Prerequisites
+## Packages
 
 The package lists `install.sh` installs, for reference (or manual install):
 
@@ -30,7 +30,7 @@ sudo pacman -S i3-wm i3status-rust rofi dunst picom guake feh nemo \
 yay -S i3lock-color rofi-greenclip mictray neofetch-git qogir-gtk-theme
 ```
 
-Notes:
+Notes(For manual installk):
 
 - `rofi` must be installed before configuring this setup, as it is used for launching applications and managing clipboard history.
 - `i3status-rust` is a Rust-based status bar that replaces the default `i3status`. It is configured via `i3status-rust/config.toml`.
@@ -42,26 +42,26 @@ Notes:
 
 ## Layout
 
-| Path                                  | Purpose                                                                                                                      |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `i3/config`                           | Window manager config: keybindings, workspaces, autostart                                                                    |
-| `i3status-rust/config.toml`           | Status bar blocks (window title, music, network, battery, etc.)                                                              |
-| `i3lock/lock.sh`                      | Screen locker invocation with custom colors, used on suspend and manual lock                                                 |
-| `rofi/config.rasi`                    | Application/window launcher theme and keybindings                                                                            |
-| `dunst/dunstrc`                       | Notification daemon configuration                                                                                            |
-| `picom/picom.conf`                    | Compositor: shadows, blur, fading                                                                                            |
-| `gtk-3.0/settings.ini`                | GTK theme, icon theme, cursor theme                                                                                          |
-| `nvim/`                               | Neovim config, built on LazyVim                                                                                              |
-| `guake/`                              | Dropdown terminal settings (not tracked in this repo; local `~/.config/guake` state)                                         |
-| `nemo/`                               | File manager settings (not tracked in this repo; local `~/.config/nemo` state)                                               |
-| `neofetch/ascii`                      | Custom ASCII art for neofetch                                                                                                |
-| `scripts/batteryWatcher.sh`           | Polls battery level and sends low-battery notifications                                                                      |
-| `systemd/user/batteryWatcher.service` | User service that runs the battery watcher on login                                                                          |
-| `.images/wallpapers/`                 | Wallpaper images — `wallpaper.jpg` (active) and `red.png` (alternate)                                                        |
-| `.xinitrc`                            | X session startup script (currently the distro-default template — starts `twm`/`xterm`/`xfce4`, does not launch i3 directly) |
-| `.zshrc`                              | Zsh config, oh-my-zsh with the `robbyrussell` theme                                                                          |
-| `.zshenv`                             | Sources `~/.cargo/env` for every zsh shell                                                                                   |
-| `install.sh`                          | Installs all packages and symlinks every tracked file into `$HOME`                                                          |
+| Path                                  | Purpose                                                                                                        |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `i3/config`                           | Window manager config: keybindings, workspaces, autostart                                                      |
+| `i3status-rust/config.toml`           | Status bar blocks (window title, music, network, battery, etc.)                                                |
+| `i3lock/lock.sh`                      | Screen locker invocation with custom colors, used on suspend and manual lock                                   |
+| `rofi/config.rasi`                    | Application/window launcher theme and keybindings                                                              |
+| `dunst/dunstrc`                       | Notification daemon configuration                                                                              |
+| `picom/picom.conf`                    | Compositor: shadows, blur, fading                                                                              |
+| `gtk-3.0/settings.ini`                | GTK theme, icon theme, cursor theme                                                                            |
+| `nvim/`                               | Neovim config, built on LazyVim                                                                                |
+| `guake/`                              | Dropdown terminal settings (not tracked in this repo; local `~/.config/guake` state)                           |
+| `nemo/`                               | File manager settings (not tracked in this repo; local `~/.config/nemo` state)                                 |
+| `neofetch/ascii`                      | Custom ASCII art for neofetch                                                                                  |
+| `scripts/batteryWatcher.sh`           | Polls battery level and sends low-battery notifications                                                        |
+| `systemd/user/batteryWatcher.service` | User service that runs the battery watcher on login                                                            |
+| `.images/wallpapers/`                 | Wallpaper images — `wallpaper.jpg` (active) and `red.png` (alternate)                                          |
+| `.xinitrc`                            | X session startup script — merges Xresources/keymaps, then `exec i3` (for `startx`; ly uses xsessions instead) |
+| `.zshrc`                              | Zsh config, oh-my-zsh with the `robbyrussell` theme                                                            |
+| `.zshenv`                             | Sources `~/.cargo/env` for every zsh shell                                                                     |
+| `install.sh`                          | Installs all packages and symlinks every tracked file into `$HOME`                                             |
 
 ## Window manager (i3)
 
@@ -109,9 +109,10 @@ Base config generated by `i3-config-wizard` and extended from there. For everyth
 
 ## Battery watcher
 
-`scripts/batteryWatcher.sh` polls `/sys/class/power_supply/BAT0/capacity` every 10 seconds and fires a desktop notification at 15% and again at 10%. Enable it with:
+`scripts/batteryWatcher.sh` polls `/sys/class/power_supply/BAT0` every 10 seconds while discharging and fires one desktop notification at 15% and an urgent one at 10% (re-armed when the charger is plugged in). On machines without a battery the service exits cleanly (`ConditionPathExists`). Enable it with:
 
 ```sh
+# .config/systemd/user/batteryWatcher.service
 systemctl --user enable --now batteryWatcher.service
 ```
 
